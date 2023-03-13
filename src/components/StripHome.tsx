@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {Alert, Button, Linking, View} from 'react-native';
-import {ApiURL, merchantIdentifier} from '../constants/index';
+import {ApiURL, merchantIdentifier, your_url_scheme} from '../constants/index';
 import {
   initPaymentSheet,
   presentPaymentSheet,
@@ -38,6 +38,7 @@ export const StripeHome = memo(() => {
         paymentIntentClientSecret: data.paymentIntent,
         allowsDelayedPaymentMethods: true,
         // customFlow: true,
+        returnURL: your_url_scheme,
         defaultBillingDetails: {
           name: 'Jane Doe',
           address: {

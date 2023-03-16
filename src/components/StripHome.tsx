@@ -1,35 +1,26 @@
 import axios from 'axios';
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {Alert, Button, Linking, View} from 'react-native';
-import {ApiURL, merchantIdentifier, your_url_scheme} from '../constants/index';
+import {Alert, Button, Linking, StyleSheet, View} from 'react-native';
+import {
+  StripeOrderURL,
+  merchantIdentifier,
+  your_url_scheme,
+} from '../constants/index';
 import {
   initPaymentSheet,
   presentPaymentSheet,
   useStripe,
-  usePlatformPay,
-  PlatformPay,
-  confirmPlatformPayPayment,
 } from '@stripe/stripe-react-native';
 
 export const StripeHome = memo(() => {
-  const {isPlatformPaySupported} = usePlatformPay();
   const {handleURLCallback} = useStripe();
 
   const [loader, setLoader] = useState(false);
 
-  useEffect(() => {
-    (async function () {
-      if (!(await isPlatformPaySupported({googlePay: {testEnv: true}}))) {
-        Alert.alert('Google Pay is not supported.');
-        return;
-      }
-    })();
-  }, [isPlatformPaySupported]);
-
   const onPayPressHandler = useCallback(async () => {
     try {
       setLoader(true);
-      const response = await axios.post(ApiURL);
+      const response = await axios.post(StripeOrderURL);
       const data = response.data;
       const responseInitPaymentSheet = await initPaymentSheet({
         merchantDisplayName: merchantIdentifier,
@@ -117,81 +108,22 @@ export const StripeHome = memo(() => {
     return () => deepLinkListener.remove();
   }, [handleDeepLink]);
 
-  const onGpayPressHandler = useCallback(async () => {
-    try {
-      setLoader(true);
-      const response = await axios.post(ApiURL);
-      const data = response.data;
-      const responseInitPaymentSheet = await initPaymentSheet({
-        merchantDisplayName: merchantIdentifier,
-        customerId: data.customer,
-        customerEphemeralKeySecret: data.ephemeralKey,
-        paymentIntentClientSecret: data.paymentIntent,
-        allowsDelayedPaymentMethods: true,
-        customFlow: true,
-        defaultBillingDetails: {
-          name: 'Jane Doe',
-          address: {
-            country: 'US',
-          },
-        },
-        applePay: {
-          merchantCountryCode: 'US',
-        },
-        googlePay: {
-          currencyCode: 'USD',
-          merchantCountryCode: 'US',
-          testEnv: true,
-        },
-        style: 'automatic',
-      });
-      console.log('responseInitPaymentSheet :- ', responseInitPaymentSheet);
-      // const responseConfirmPaymentSheet = await confirmPaymentSheetPayment();
-      // console.log(
-      //   'responseConfirmPaymentSheet :- ',
-      //   responseConfirmPaymentSheet,
-      // );
-      const responseConfirmPlatformPayPayment = await confirmPlatformPayPayment(
-        'sk_test_tR3PYbcVNZZ796tH88S4VQ2u',
-        {
-          googlePay: {
-            testEnv: true,
-            merchantName: 'My merchant name',
-            merchantCountryCode: 'US',
-            currencyCode: 'USD',
-            billingAddressConfig: {
-              format: PlatformPay.BillingAddressFormat.Full,
-              isPhoneNumberRequired: true,
-              isRequired: true,
-            },
-          },
-        },
-      );
-      console.log(
-        'responseConfirmPlatformPayPayment :- ',
-        responseConfirmPlatformPayPayment,
-      );
-      if (!responseConfirmPlatformPayPayment.error) {
-        // const response = await confirmPaymentSheetPayment();
-        // console.log('Response :- ', response);
-        Alert.alert('Payment Done Successfully', '', [
-          {text: 'OK', onPress: () => {}},
-        ]);
-      } else {
-        throw new Error(responseConfirmPlatformPayPayment.error.message);
-      }
-    } catch (err) {
-      Alert.alert('Payment Failed', '', [{text: 'OK', onPress: () => {}}]);
-      console.log('Error in order create :- ', JSON.stringify(err));
-    } finally {
-      setLoader(false);
-    }
-  }, []);
-
   return (
-    <View>
-      <Button disabled={loader} title="Pay" onPress={onPayPressHandler} />
+    <View style={styles.mainView}>
+      <Button
+        disabled={loader}
+        title="Pay With Stripe"
+        onPress={onPayPressHandler}
+      />
       {/* <Button disabled={loader} title="GPay" onPress={onGpayPressHandler} /> */}
     </View>
   );
+});
+
+const styles = StyleSheet.create({
+  mainView: {
+    borderWidth: 1,
+    borderRadius: 10,
+    padding: 10,
+  },
 });

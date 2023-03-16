@@ -1,7 +1,7 @@
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {StripeProvider} from '@stripe/stripe-react-native';
-import {StripeHome} from './src/components/index';
+import {Paypal, StripeHome} from './src/components/index';
 import {
   merchantIdentifier,
   publishableKey,
@@ -17,6 +17,7 @@ const App = () => {
         merchantIdentifier={merchantIdentifier} // required for Apple Pay
       >
         <StripeHome />
+        <Paypal />
         {/* <StripeCard /> */}
       </StripeProvider>
     </SafeAreaView>

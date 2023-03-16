@@ -82,5 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
+    justifyContent: 'space-between',
+    minHeight: 100,
   },
 });

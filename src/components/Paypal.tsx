@@ -16,7 +16,8 @@ export const Paypal = memo(() => {
       // const responseParse = await response.json();
       // const token = responseParse?.clientToken || '';
       const token = paypalToken;
-      // console.log('token  :- ', token);
+      console.log('token  :- ', token);
+      console.log('token  :- ', token);
       const oneTimePaymentResponse = await requestOneTimePayment(token, {
         amount: '100',
         currency: 'USD',

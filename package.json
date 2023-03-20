@@ -13,9 +13,12 @@
     "@stripe/stripe-react-native": "^0.25.0",
     "axios": "^1.3.4",
     "base-64": "^1.0.0",
+    "formik": "^2.2.9",
     "react": "18.2.0",
     "react-native": "0.71.4",
-    "react-native-paypal": "^4.1.0"
+    "react-native-keyboard-manager": "^6.5.11-0",
+    "react-native-paypal": "^4.1.0",
+    "yup": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

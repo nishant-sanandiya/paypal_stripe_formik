@@ -7,20 +7,22 @@ import {
   publishableKey,
   your_url_scheme,
 } from './src/constants';
+import {Form} from './formik';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.container}>
-      <StripeProvider
-        publishableKey={publishableKey}
-        urlScheme={your_url_scheme} // required for 3D Secure and bank redirects
-        merchantIdentifier={merchantIdentifier} // required for Apple Pay
-      >
-        <StripeHome />
-        <Paypal />
+    <StripeProvider
+      publishableKey={publishableKey}
+      urlScheme={your_url_scheme} // required for 3D Secure and bank redirects
+      merchantIdentifier={merchantIdentifier} // required for Apple Pay
+    >
+      <SafeAreaView style={styles.container}>
+        {/* <StripeHome />
+        <Paypal /> */}
+        <Form />
         {/* <StripeCard /> */}
-      </StripeProvider>
-    </SafeAreaView>
+      </SafeAreaView>
+    </StripeProvider>
   );
 };
 
